@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Search</title>
+</head>
+<body>
+    <h1>Search Flights</h1>
+    <form action="{{ url_for('getFlights') }}" method="post">
+        <label>
+            <input type="radio" name="trip_type" value="oneway" checked>
+            One Way
+        </label>
+        <label>
+            <input type="radio" name="trip_type" value="roundtrip">
+            Round Trip
+        </label>
+        <br><br>
+        
+        <label for="source">From:</label>
+        <input type="text" id="source" name="source" required>
+        <br><br>
+        
+        <label for="destination">To:</label>
+        <input type="text" id="destination" name="destination" required>
+        <br><br>
+        
+        <label for="departure_date">Departure Date:</label>
+        <input type="date" id="departure_date" name="departure_date" required>
+        <br><br>
+        
+        <div id="return_date_container" style="display: none;">
+            <label for="return_date">Return Date:</label>
+            <input type="date" id="return_date" name="return_date">
+            <br><br>
+        </div>
+        
+        <button type="submit">Search Flights</button>
+    </form>
+
+    <script>
+        document.querySelectorAll('input[name="trip_type"]').forEach(input => {
+            input.addEventListener('change', () => {
+                if (document.querySelector('input[name="trip_type"]:checked').value === 'roundtrip') {
+                    document.getElementById('return_date_container').style.display = 'block';
+                } else {
+                    document.getElementById('return_date_container').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
