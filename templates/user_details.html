@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">User Details</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Name</h5>
+                <p class="card-text"><strong>First Name:</strong> {{ user.firstname }}</p>
+                <p class="card-text"><strong>Last Name:</strong> {{ user.lastname }}</p>
+                
+                <h5 class="card-title">Contact Information</h5>
+                <p class="card-text"><strong>Phone Number:</strong> {{ user.phoneno }}</p>
+                <p class="card-text"><strong>Email ID:</strong> {{ user.email }}</p>
+                
+                <h5 class="card-title">Account Information</h5>
+                <p class="card-text"><strong>Created At:</strong> {{ user.createdat }}</p>
+                <p class="card-text"><strong>Updated At:</strong> {{ user.updated_at }}</p>
+            </div>
+        </div>
+        <a href="{{ url_for('update_page') }}">View User Details</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

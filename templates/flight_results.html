@@ -4,26 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Results</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Flight Results</h1>
+    <div class="container">
+        <h1 class="mt-4">Flight Results</h1>
 
-    <h2>Departure Flights</h2>
-    <ul>
-        {% for flight in departure_flights %}
-            <li>Departure Time: {{ flight.departuretimedate.strftime('%Y-%m-%d %H:%M:%S') }} - Airline: {{ flight.name }} - Arrival Time: {{ flight.arrivaltimedate.strftime('%Y-%m-%d %H:%M:%S') }} - Price : {{ flight.price }} </li>
-        {% endfor %}
-    </ul>
-
-    {% if trip_type == 'roundtrip' %}
-        <h2>Return Flights</h2>
-        <ul>
-            {% for flight in return_flights %}
-                <li>Departure Time: {{ flight.departuretimedate.strftime('%Y-%m-%d %H:%M:%S') }} - Airline: {{ flight.name }}</li>
+        <h2 class="mt-4">Departure Flights</h2>
+        <ul class="list-group">
+            {% for flight in departure_flights %}
+                <li class="list-group-item">
+                    <strong>Departure Time:</strong> {{ flight.departuretimedate.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                    <strong>Airline:</strong> {{ flight.name }}<br>
+                    <strong>Arrival Time:</strong> {{ flight.arrivaltimedate.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                    <strong>Price:</strong> {{ flight.price }}
+                </li>
             {% endfor %}
         </ul>
-    {% endif %}
 
-    <a href="/flightpage">Search Again</a>
+        {% if trip_type == 'roundtrip' %}
+            <h2 class="mt-4">Return Flights</h2>
+            <ul class="list-group">
+                {% for flight in return_flights %}
+                    <li class="list-group-item">
+                        <strong>Departure Time:</strong> {{ flight.departuretimedate.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                        <strong>Airline:</strong> {{ flight.name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="mt-4">
+            <a href="/flightpage" class="btn btn-primary">Search Again</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

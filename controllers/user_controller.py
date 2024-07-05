@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, jsonify, render_template
+from flask import request, redirect, url_for, jsonify, render_template,flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import UserModel
 from flask_jwt_extended import create_access_token
@@ -24,7 +24,7 @@ def login():
     user = user_model.get_user_by_email(email)
 
     if user and check_password_hash(user['password_hash'], password):
-        access_token = create_access_token(identity={'email': email})
+        # access_token = create_access_token(identity={'email': email})
         # return jsonify(access_token=access_token)
         return redirect(url_for ('getFlights'))
     
@@ -36,4 +36,14 @@ def getflights():
     dest = request.form['destination']
     departure_date = request.form['departure_date']
     return_date = request.form.get('return_date')    
+    
     return user_model.getflight(trip_type,src,dest,departure_date,return_date)
+
+def update_details(id):
+    fn=request.form.get('firstname')
+    ln=request.form.get('lastname')
+    user_model.updatenames(fn,ln,id)
+    return redirect(url_for('user'))
+    
+    
+        

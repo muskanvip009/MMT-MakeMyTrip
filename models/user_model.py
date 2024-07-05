@@ -64,11 +64,25 @@ class UserModel:
         print(one_way_results)
         
         return [one_way_results,round_trip_result]
+    
+    def get_userid_by_email(self,email):
+        self.cursor.execute('SELECT userid FROM users WHERE email = %s', (email,))
+        return self.cursor.fetchone()        
+    
+    def updatenames(self,fn,ln,uid):
+        # if(len(ln)>0):
+        self.cursor.execute('update users set lastname = %s where (userid = %s) ', (ln,uid))
+        # if(len(fn)>0):
+        self.cursor.execute('update users set firstname = %s where (userid = %s) ', (fn,uid))
+        return 
+            
+    def updatepassword(self,newpass,email):
+        self.cursor.execute('update users set password_hash= %s where (email = %s) ', (newpass,email))
         
+        
+        
+            
 
-
-    
-    
     
     
         
