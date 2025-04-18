@@ -5,7 +5,6 @@ from config.config import Config
 from models.user_model import UserModel
 import controllers.user_controller as user_controller
 from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -26,6 +25,8 @@ google = oauth.remote_app(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
 
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -45,32 +46,32 @@ def login():
 @app.route('/login/google/authorized')
 def google_authorized():
     response = google.authorized_response()
-    
+
     if response is None or response.get('access_token') is None:
         return "Error found in login google"
-    
+
     session['google_token'] = (response['access_token'], '')
     userinfo = google.get('userinfo')
     email = userinfo.data['email']
-    
+
     user = UserModel().get_user_by_email(email)
     if not user:
         UserModel().add_user(email, None)
-    
+
     session['user_email'] = email
     session['user_id'] = UserModel().get_userid_by_email(email)
-    
+
     user = UserModel().get_user_by_email(email)
     if not user:
         UserModel().add_user(email, None)
-    
+
     # access_token = create_access_token(identity={'email': email})
     # return jsonify(access_token=access_token)
     return redirect(url_for ('flightpage'))
 
 @app.route('/flightpage')
 def flightpage():
-    userinfo = google.get('userinfo') 
+    userinfo = google.get('userinfo')
     email = userinfo.data['email']
     user = UserModel().get_user_by_email(email)
 
@@ -118,7 +119,7 @@ def protected():
     else:
         userinfo = google.get('userinfo').data
         return jsonify(logged_in_as=userinfo['email']), 200
-    
+
 @app.route('/getFlights',methods=['POST','GET'])
 def getFlights():
     flights=user_controller.getflights()[0]
@@ -126,33 +127,32 @@ def getFlights():
     trip_type = request.form['trip_type']
     return render_template('flight_results.html',departure_flights=flights,returnflights=returnflights, trip_type=trip_type)
 
-
 @app.route('/user')
-@token_required  
+@token_required
 def user():
     email = session.get('user_email')
     user_id = session.get('user_id')
-    
+
     if not email or not user_id:
         return jsonify({'error': 'User not logged in'}), 401
-    user = UserModel().get_user_by_email(email)       
+    user = UserModel().get_user_by_email(email)
     return render_template('user_details.html', user=user)
 
 
 @app.route('/update_details',methods=['POST','GET'])
-@token_required  
+@token_required
 def update_details():
-    user_id = session.get('user_id')    
+    user_id = session.get('user_id')
     print(user_id)
     return user_controller.update_details(user_id['userid'])
 
 @app.route('/update_page',methods=['POST','GET'])
 def update_page():
-    email = session.get('user_email') 
-    user = UserModel().get_user_by_email(email)    
-    
-    return render_template('update.html',user=user)    
-    
+    email = session.get('user_email')
+    user = UserModel().get_user_by_email(email)
+
+    return render_template('update.html',user=user)
+
 @app.route('/change_password', methods=['POST'])
 def change_password():
     user_id = session.get('user_id')
@@ -164,13 +164,13 @@ def change_password():
     confirmpassword=request.form.get('confirmpassword')
     if(new_password!=confirmpassword):
         flash('Confirm and new password do not match', 'danger')
-        
-    email = session.get('user_email') 
 
-    user = UserModel().get_user_by_email(email)   
-    print(user) 
+    email = session.get('user_email')
 
-    
+    user = UserModel().get_user_by_email(email)
+    print(user)
+
+
     if not user or not check_password_hash(user['password_hash'], old_password):
         flash('Old password is incorrect', 'danger')
         return "old password is incorrect"
@@ -180,10 +180,8 @@ def change_password():
     UserModel().updatepassword(new_password_hash,email)
 
     flash('Password updated successfully', 'success')
-    return redirect(url_for('user')) 
-
-
+    return redirect(url_for('user'))
 
 
 if __name__ == '__main__':
-    app.run(debug=True)    
+    app.run(debug=True)
