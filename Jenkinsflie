@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_COMPOSE = 'docker-compose -f docker-compose.yml'
+    }
+
+    stages {
+        stage('Pull Code') {
+            steps {
+                git 'https://github.com/muskanvip009/MMT-MakeMyTrip.git'
+            }
+        }
+
+        stage('Build & Test Locally') {
+            steps {
+                sh "${DOCKER_COMPOSE} down"
+                sh "${DOCKER_COMPOSE} up --build -d"
+                sh "docker ps"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Local test + build success'
+        }
+        failure {
+            echo '❌ Build failed'
+        }
+    }
+}

@@ -1,3 +1,4 @@
+version: "3.8"
 
 services:
   db:
@@ -36,8 +37,23 @@ services:
     networks:
       - makemytrip_network
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    restart: always
+    ports:
+      - "9090:8080"
+      - "50000:50000"
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false 
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - makemytrip_network
+
 volumes:
   mysql_data:
+  jenkins_home:
 
 networks:
   makemytrip_network:
